@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "optimizely-cms": {
+      "type": "http",
+      "url": "http://localhost:5080/mcp",
+      "headers": {
+        "Authorization": "poc-local-mcp-secret-7f3a9c"
+      }
+    }
+  }
+}

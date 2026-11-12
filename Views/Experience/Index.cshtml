@@ -1,0 +1,39 @@
+@using EPiServer.Framework.Web.Mvc.Html
+@model EPiServer.VisualBuilder.ExperienceData
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="@Model.Language">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@Model.Name</title>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/style.min.css" />
+    <link rel="stylesheet" href="~/css/theme.min.css" />
+    <required-client-resources area="Header" />
+</head>
+<body>
+    @await Html.RenderEPiServerQuickNavigatorAsync()
+    <div class="container py-4">
+        <p><a href="/">&larr; Start</a></p>
+        <h1>@Model.Name</h1>
+        @* Sections without their own view fall back to the grid template declared here *@
+        @* <epi-outline> throws on an experience that has no layout yet *@
+        @if (Model.Layout != null)
+        {
+        <epi-outline experience="@Model">
+            <epi-grid class="vb-section my-4">
+                <epi-row class="row">
+                    <epi-column class="col">
+                        <epi-component class="mb-3" />
+                    </epi-column>
+                </epi-row>
+            </epi-grid>
+            <epi-component class="mb-3" />
+        </epi-outline>
+        }
+    </div>
+    @await Html.PartialAsync("_PocDebug")
+    <required-client-resources area="Footer" />
+</body>
+</html>

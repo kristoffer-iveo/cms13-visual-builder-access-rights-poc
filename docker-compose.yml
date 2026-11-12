@@ -1,0 +1,14 @@
+# SQL Server for the local POC only. Start: docker compose up -d
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: cms13-poc-db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Qwerty12345!"
+    ports:
+      - "127.0.0.1:14333:1433"
+    volumes:
+      - cms13-poc-db:/var/opt/mssql
+volumes:
+  cms13-poc-db:

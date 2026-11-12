@@ -1,0 +1,15 @@
+@using EPiServer.Personalization.VisitorGroups
+@inject IVisitorGroupRepository Groups
+@inject IVisitorGroupRoleRepository GroupRoles
+@* POC helper: shows who the visitor is and which audiences they match *@
+@{
+    var matched = Groups.List().Where(g =>
+        GroupRoles.TryGetRole(g.Name, out var role) && role.IsMatch(User, Context)).Select(g => g.Name);
+}
+<div class="container"><div class="alert alert-secondary small my-3">
+    <strong>POC debug</strong> &middot;
+    User: @(User.Identity?.IsAuthenticated == true ? User.Identity.Name : "anonymous")
+    (@if (User.Identity?.IsAuthenticated == true) { <a href="/util/logout">log out</a> } else { <a href="/util/login?ReturnUrl=@Context.Request.Path">log in</a> })
+    &middot; Roles: @string.Join(", ", User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).Distinct())
+    &middot; Matched audiences: @(string.Join(", ", matched) is { Length: > 0 } s ? s : "none")
+</div></div>

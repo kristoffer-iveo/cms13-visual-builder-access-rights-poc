@@ -1,0 +1,10 @@
+{
+ "POC Shared block – Public": "32d3a1b3-28b1-4dfc-b8cd-55bbbf3fda8b",
+ "POC Shared block – Members only (read ACL)": "4a28a642-ba2b-46a2-a2af-95044b8dfab7",
+ "POC Shared block – Only admins can edit (edit ACL)": "ddba4941-1a50-4557-b799-72aa519cd9d6",
+ "POC Shared block – VIP message": "edbfaff6-0307-4ee0-879e-cdb7377ff2d6",
+ "POC Shared block – Default message": "2aef3939-e533-48c5-a6a6-b1135fb30246",
+ "POC Shared block as section – Members only (read ACL)": "bca09961-4a17-4042-a9fe-4e09b0bf60cc",
+ "Visual Builder POC": "055993b8-8206-46d5-a4ee-687e4f785d08",
+ "Classic page (Content Area)": "8c672c39-7fd1-4b93-8ea2-60544c85a086"
+}
