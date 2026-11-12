@@ -58,10 +58,9 @@ Local test accounts only. All passwords and secrets in this repository are throw
 | User | Password | Roles | Purpose |
 |---|---|---|---|
 | `admin` | `Admin123!poc` | WebAdmins | Everything, including access rights and audiences |
-| `editor` | `Test123!poc` | WebEditors, VisitorGroupAdmins | Editor in Visual Builder |
 | `member` | `Test123!poc` | Members | Visitor with Read access to the restricted blocks |
 
-Audiences: **POC VIP** (matches `?audience=vip`) and **POC Student** (matches `?audience=student`).
+Audience: **POC VIP** (matches `?audience=vip`).
 
 ## Reproduce in two minutes
 
@@ -88,7 +87,6 @@ Shared blocks (Shared Blocks > For All Applications). The same blocks are used o
 | POC Shared block – Public | Inherited (everyone can read) |
 | POC Shared block – Members only (read ACL) | Restricted, see below |
 | POC Shared block as section – Members only (read ACL) | Restricted, see below |
-| POC Shared block – Only admins can edit (edit ACL) | Everyone: Read. WebEditors: Read. WebAdmins, CmsAdmins: full access |
 | POC Shared block – VIP message / Default message | Inherited, used for the audience test |
 
 Exact access rights on the two restricted blocks (inheritance turned off, `Everyone` has no entry):
@@ -176,7 +174,6 @@ Limitations:
 - It has to be a **section**, not an element. The site fails to start if a type with `ElementEnabled` has a
   `ContentArea` property ("The property 'Items' is not allowed when content type has ElementEnabled").
   The hybrid block therefore cannot be placed in a column next to other elements.
-- The view uses `@Html.PropertyFor`. The `epi-property` tag helper produced empty output here (cause not investigated).
 
 ### 2. A custom access filter in the Visual Builder rendering (`?vbfilter=1`)
 
@@ -190,38 +187,9 @@ built-in renderers and skips shared blocks the visitor is not allowed to read. I
 Limitations: the interface is in an `*.Internal` namespace (unsupported API that can change between versions),
 and it covers read access only, not audiences.
 
-## On-page edit
+## Not tested
 
-On-page edit is off by default in CMS 13 (the view selector only has All Properties and Visual Builder).
-It is switched on in `appsettings.json`:
-
-```json
-"EPiServer": { "CmsUI": { "CmsFeature": { "SectionsVisibility": { "OnPageEditing": true } } } }
-```
-
-- Classic pages then get **On-Page Editing** in the view selector, with the Content Area editor and Personalize.
-- Experiences do **not**: `ExperiencePageUIDescriptor` explicitly disables the `onpageedit` view for `ExperienceData`.
-- The Visual Builder view is also shown for classic pages (properties on the left, preview on the right). It can be
-  limited to experiences with `EPiServer:CmsUI:VisualBuilder:ShowVisualBuilderForAllContentTypes = false` (not tested).
-
-## Other findings
-
-- Audiences are opt-in in CMS 13: the package `EPiServer.CMS.UI.VisitorGroups` plus
-  `AddVisitorGroupsMvc().AddVisitorGroupsUI()`.
-- No experience or section types are included; `BlankExperience` and `BlankSection` are defined in
-  `Models/Pages/VisualBuilderTypes.cs`.
-- A grid section cannot be saved as a shared block ("can only be used within experiences or as a blueprint").
-  A shared block used as a section has to be a regular block type with `SectionEnabled`.
-- `<epi-outline>` throws a NullReferenceException for an experience without a layout (guarded in
-  `Views/Experience/Index.cshtml`).
-- The CMS MCP server (`Optimizely.Cms.Opal.Tools` 13.4, `http://localhost:5080/mcp`, see `.mcp.json`):
-  - has no tools for access rights, users or audiences,
-  - stores a `reference` component in a composition as an inline **copy**, not as a shared reference,
-  - fails on XhtmlString in such copies ("The XhtmlString instance is read-only"),
-  - requires `properties` and `composition` as JSON strings,
-  - runs as the role `CmsAdmins`, which needs access rights in the content tree.
-
-Not tested: Optimizely Graph / headless delivery, expired or unpublished shared blocks in the Visual Builder
+Optimizely Graph / headless delivery, expired or unpublished shared blocks in the Visual Builder
 path, and versions other than 13.6.0.
 
 ## Where things are
@@ -231,5 +199,5 @@ path, and versions other than 13.6.0.
 - `Models/Blocks/VisualBuilderElements.cs` – elements and the hybrid section `ContentAreaSection`.
 - `Business/PocSeeder.cs` – runs at startup and is idempotent: accounts, roles, audiences, access rights and the
   shared block references in the experience.
-- `scripts/` – how the content was first created through the MCP server. Not needed when the database is restored.
 - `db/` – database backup and restore script.
+- `NOTES.md` – other findings from the POC that are not part of the bug report (On-page edit, the CMS MCP server, setup notes).
